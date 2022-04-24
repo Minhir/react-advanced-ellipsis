@@ -5,7 +5,7 @@ import { faker } from "@faker-js/faker";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 
-import { TailedEllipsis } from "../dist";
+import { TailedEllipsis } from "../src";
 
 function getRenderer(field: string) {
   return ({ data }) => {
@@ -25,7 +25,7 @@ function generateItem() {
   return {
     name: faker.name.findName(),
     email: faker.internet.email(),
-    text: faker.lorem.text(),
+    text: faker.lorem.sentences(),
   };
 }
 

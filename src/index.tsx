@@ -32,16 +32,9 @@ const baseTextStyle = {
   display: "inline-block",
 } as const;
 
-const baseHiddenStyle = {
-  position: "absolute",
-  visibility: "hidden",
-  userSelect: "none",
-} as const;
+const baseHiddenStyle = { position: "absolute", visibility: "hidden" } as const;
 
-const hiddenTextStyle = {
-  ...baseTextStyle,
-  ...baseHiddenStyle,
-} as const;
+const hiddenTextStyle = { ...baseTextStyle, ...baseHiddenStyle } as const;
 
 const hiddenTailStyle = { ...tailStyle, ...baseHiddenStyle } as const;
 
@@ -147,36 +140,33 @@ const TailedEllipsis = React.memo<TailedEllipsisProps>(
       };
     }, []);
 
-    const visibleContent = (
-      <>
-        <div style={textStyle}>{isEllipsisShown ? head : text}</div>
-        {isEllipsisShown ? <div style={tailStyle}>{tail}</div> : null}
-      </>
-    );
-
-    const invisibleContent = (
-      <>
-        <div
-          data-tailed-ellipsis-role="text"
-          data-tailed-ellipsis-id={id}
-          ref={hiddenTextRef}
-          style={hiddenTextStyle}
-        >
-          {text}
-        </div>
-
-        <div
-          data-tailed-ellipsis-role="tail"
-          data-tailed-ellipsis-id={id}
-          ref={hiddenTailRef}
-          style={hiddenTailStyle}
-        >
-          {tail}
-        </div>
-      </>
-    );
-
     const isObserverReady = tailWidth !== null;
+
+    const headText = isObserverReady ? (
+      <div style={textStyle}>{isEllipsisShown ? head : text}</div>
+    ) : null;
+
+    const tailText = (
+      <div
+        data-tailed-ellipsis-role="tail"
+        data-tailed-ellipsis-id={id}
+        ref={hiddenTailRef}
+        style={isEllipsisShown ? tailStyle : hiddenTailStyle}
+      >
+        {tail}
+      </div>
+    );
+
+    const hiddenText = (
+      <div
+        data-tailed-ellipsis-role="text"
+        data-tailed-ellipsis-id={id}
+        ref={hiddenTextRef}
+        style={hiddenTextStyle}
+      >
+        {text}
+      </div>
+    );
 
     return (
       <div
@@ -187,8 +177,9 @@ const TailedEllipsis = React.memo<TailedEllipsisProps>(
         data-tailed-ellipsis-role="parent"
         data-tailed-ellipsis-id={id}
       >
-        {isObserverReady && visibleContent}
-        {invisibleContent}
+        {headText}
+        {tailText}
+        {hiddenText}
       </div>
     );
   }
