@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "strict": true,
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "jsx": "react",
+    "declaration": true
+  },
+  "files": ["./src/index.tsx"]
+}
