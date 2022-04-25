@@ -12,7 +12,7 @@ export const TextGallery = ({
   tailLength: number;
 }) => {
   return (
-    <div>
+    <div style={{ fontSize: "16px", fontFamily: "arial" }}>
       {widths.map((width) => {
         return (
           <div

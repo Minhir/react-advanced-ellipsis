@@ -14,7 +14,7 @@ window.onerror = (event, source, lineno, colno, error) => {
 };
 
 export const ILoveEllipsisScreenshot = () => (
-  <TextGallery widths={[100, 120, 125]} tailLength={13}>
-    {"I don't love ellipsis"}
+  <TextGallery widths={[125, 135]} tailLength={13}>
+    I don't love ellipsis
   </TextGallery>
 );
