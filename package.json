@@ -37,6 +37,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "build:storybook": "build-storybook --output-dir storybook-static",
     "clean": "rm -rf dist",
     "storybook": "start-storybook -p 6006",
     "lint": "prettier --check ./src"
