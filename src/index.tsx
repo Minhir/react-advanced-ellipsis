@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useLayoutEffect, useRef, useState, useMemo } from "react";
 
 interface TailedEllipsisProps {
   /**
@@ -23,7 +23,7 @@ const parentStyle = { whiteSpace: "pre", overflow: "hidden" } as const;
 
 const tailStyle = { display: "inline-block", verticalAlign: "middle" } as const;
 
-const baseTextStyle = {
+const baseHeadStyle = {
   overflow: "hidden",
   textOverflow: "ellipsis",
   // Min width '2ch' helps to keep first letter for most of the fonts
@@ -32,13 +32,10 @@ const baseTextStyle = {
   display: "inline-block",
 } as const;
 
-const tailedEllipsisStatesCbks = new Map<string, (width: number) => void>();
-
-let idCounter = 0;
-
-function getId() {
-  return `${idCounter++}`;
-}
+const tailedEllipsisStatesCbks = new Map<
+  HTMLSpanElement,
+  (width: number) => void
+>();
 
 const resizeObserver = new ResizeObserver((entries) => {
   for (const entry of entries) {
@@ -46,55 +43,54 @@ const resizeObserver = new ResizeObserver((entries) => {
       continue;
     }
 
-    const id = entry.target.dataset.tailedEllipsisId;
-    const setTailWidth = id ? tailedEllipsisStatesCbks.get(id) : null;
+    const setTailWidth = tailedEllipsisStatesCbks.get(entry.target);
 
     if (setTailWidth) {
-      const { width } = entry.contentRect;
-
-      setTailWidth(Math.ceil(width));
+      setTailWidth(Math.ceil(entry.contentRect.width));
     }
   }
 });
 
 const TailedEllipsis = React.memo<TailedEllipsisProps>(
   ({ children: text, tailLength, title, className }) => {
-    const [id] = useState(getId);
     const [tailWidth, setTailWidth] = useState<number | null>(null);
     const tailRef = useRef<HTMLSpanElement>(null);
 
     const head = useMemo(() => text.slice(0, -tailLength), [text, tailLength]);
     const tail = useMemo(() => text.slice(-tailLength), [text, tailLength]);
 
-    const textStyle = useMemo(
+    const headStyle = useMemo(
       () =>
         tailWidth === null
-          ? baseTextStyle
-          : { ...baseTextStyle, maxWidth: `calc(100% - ${tailWidth}px)` },
+          ? baseHeadStyle
+          : { ...baseHeadStyle, maxWidth: `calc(100% - ${tailWidth}px)` },
       [tailWidth]
     );
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       const tailElement = tailRef.current;
 
       if (!tailElement) {
         return;
       }
 
-      tailedEllipsisStatesCbks.set(id, setTailWidth);
+      tailedEllipsisStatesCbks.set(tailElement, setTailWidth);
 
       resizeObserver.observe(tailElement);
 
+      // Prevent tail jitter due to unknown initial width
+      setTailWidth(Math.ceil(tailElement.offsetWidth));
+
       return () => {
         resizeObserver.unobserve(tailElement);
-        tailedEllipsisStatesCbks.delete(id);
+        tailedEllipsisStatesCbks.delete(tailElement);
       };
     }, []);
 
     return (
       <div className={className} title={title} style={parentStyle}>
-        <span style={textStyle}>{head}</span>
-        <span data-tailed-ellipsis-id={id} ref={tailRef} style={tailStyle}>
+        <span style={headStyle}>{head}</span>
+        <span ref={tailRef} style={tailStyle}>
           {tail}
         </span>
       </div>

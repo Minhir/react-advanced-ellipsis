@@ -23,7 +23,7 @@ const columnDefs = [
 
 function generateItem() {
   return {
-    name: faker.name.findName(),
+    name: faker.name.fullName(),
     email: faker.internet.email(),
     text: faker.lorem.sentences(),
   };
