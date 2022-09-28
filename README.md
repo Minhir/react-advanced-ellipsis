@@ -43,17 +43,6 @@ Props:
 
 > NOTE: the library uses ResizeObserver inside. You may need a polyfill for some old browsers.
 
-## How to build the library
+## Storybook
 
-```
-npm install
-npm run build
-```
-
-It will produce artifacts into `dist` folder
-
-## How to run storybook
-
-```
-npm run storybook
-```
+You can see components here https://minhir.github.io/react-advanced-ellipsis

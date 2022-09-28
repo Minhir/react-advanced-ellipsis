@@ -27,7 +27,6 @@
     "@storybook/react": "6.5.12",
     "@types/react": "^18.0.21",
     "ag-grid-react": "^28.1.1",
-    "playwright": "^1.26.0",
     "prettier": "2.7.1",
     "react-dom": "^18.2.0",
     "typescript": "^4.8.3"
