@@ -1,5 +1,8 @@
 # React advanced ellipsis
 
+[![](https://img.shields.io/npm/v/react-advanced-ellipsis)](https://www.npmjs.com/package/react-advanced-ellipsis)
+![](https://img.shields.io/github/license/minhir/react-advanced-ellipsis?color=blue)
+
 Truncate string where you want and keep it's tail.
 
 Original phrase:
